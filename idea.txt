@@ -1,0 +1,101 @@
+THE SUN GATE
+A temple escape room starring Indiana Jones
+
+
+1. PREMISE
+
+Indiana Jones follows an old map to a jungle temple said to hold a golden idol.
+The moment he steps inside, the entrance door slams shut behind him. A giant
+hourglass in the hall flips over and the sand starts to fall. When it empties,
+the temple seals forever.
+
+The only way out is the Sun Gate at the far side of the temple, and it opens
+only with the Sun Medallion. Indy has to find the medallion, grab the idol, and
+reach daylight before the sand runs out.
+
+The temple was built to confuse thieves. Its passages twist, so leaving a room
+west can bring you back in from the north. A low tunnel also runs under the
+entrance hall, linking the crypt directly to the bridge.
+
+
+2. ROOMS (mapped to layout.txt)
+
+R0  Entrance Hall (START)
+    The sealed door, the giant hourglass and a stone guardian face.
+R1  Cistern Passage
+    A dripping corridor where a stone plug dams an underground spring.
+R2  Crypt
+    Dusty tombs. The Sun Medallion rests on a sarcophagus.
+R3  Idol Altar
+    The golden idol sits on a pedestal under carvings of snarling monkeys.
+R4  Rope Bridge
+    A rotting bridge over a chasm. The Sun Gate is at the far end.
+R5  Sun Gate (LOCKED, opened by the medallion)
+    Daylight and the jungle beyond. Freedom.
+
+
+3. ITEMS AND NPC
+
+medallion  (Crypt, ITEM_SLOT_0)  the key, used on the Rope Bridge
+           The gate's carved sun swallows the medallion and the stone grinds open.
+whip       (Cistern Passage)     used on the Rope Bridge
+           Indy cracks the whip around a beam and swings over the broken planks.
+idol       (Idol Altar)          used at the Sun Gate, required to win
+           Indy holds the idol up to the daylight. It was worth it.
+
+guardian   (Entrance Hall, NPC)
+           The sand falls fast, stranger. Water turns the wheel and the wheel
+           lifts the sand. Find the sun to leave, and take what you came for.
+
+
+4. SIMULATION (Milestone Two)
+
+Resources at the start:  sand 7, water 0
+
+Machines:
+    spring      Cistern Passage  PRODUCER   makes 3 water          starts OFF
+    waterwheel  Entrance Hall    CONVERTER  2 water -> 2 sand      starts OFF
+    hourglass   Entrance Hall    CONSUMER   uses 1 sand            starts ON
+
+The hourglass is the escape room timer. Seven grains is not enough time to grab
+the medallion and the idol and reach the gate. The player has to buy time by
+opening the spring and starting the waterwheel, which lifts sand back into the
+hourglass. With both running, the sand rises by 1 each tick instead of falling.
+
+Balance check:
+    Skip the machines and the sand runs out on tick 7, just before the gate.
+    Fastest winning route (10 ticks): toggle waterwheel, west, toggle spring,
+    west, take idol, east, take medallion, east, use medallion, east.
+    Indy walks out with 13 sand left.
+
+
+5. END CONDITIONS
+
+WIN   Escape: Indy is at the Sun Gate (R5) carrying the idol.
+LOSE  Sealed in: the sand reaches 0.
+
+
+6. EXTRA FEATURES (planned)
+
+- A map command that draws the temple in ASCII and marks where Indy is.
+- Chase flavour: after the idol is taken, every reply ends with a line about
+  the monkeys closing in.
+- The guardian gives a new riddle once the waterwheel is turning.
+
+
+7. DRAFT content.txt
+
+ROOM;R0;Entrance Hall;The door behind you is sealed. A giant hourglass drains beside a dry waterwheel. Passages lead north and west.
+ROOM;R1;Cistern Passage;Water drips from a stone plug in the wall. The passage runs east and west and steps lead south.
+ROOM;R2;Crypt;Dusty tombs line the walls. Steps lead north, a passage runs west and a low tunnel heads east under the entrance hall.
+ROOM;R3;Idol Altar;A golden idol glints on its pedestal. The twisting passages lead north and east.
+ROOM;R4;Rope Bridge;A rotting bridge spans a chasm. The Sun Gate looms to the east. The tunnel runs west and the hall is south.
+ROOM;R5;Sun Gate;Daylight floods in from the jungle.
+ITEM;ITEM_SLOT_0;medallion;A bronze disc carved with a sun.;The gate's carved sun swallows the medallion and the stone grinds open.
+ITEM;R1;whip;A well worn leather bullwhip.;Indy cracks the whip around a beam and swings over the broken planks.
+ITEM;R3;idol;A heavy golden idol.;Indy holds the idol up to the daylight. It was worth it.
+NPC;R0;guardian;The sand falls fast, stranger. Water turns the wheel and the wheel lifts the sand. Find the sun to leave, and take what you came for.
+MACHINE;R1;PRODUCER;spring;An underground spring held back by a stone plug.;OFF;water;3
+MACHINE;R0;CONVERTER;waterwheel;A wheel that lifts sand back into the hourglass.;OFF;water;2;sand;2
+MACHINE;R0;CONSUMER;hourglass;When it empties the temple seals forever.;ON;sand;1
+RESOURCE;sand;7
